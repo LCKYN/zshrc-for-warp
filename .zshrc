@@ -47,13 +47,6 @@ if [[ "$TERM_PROGRAM" == "WarpTerminal" ]]; then
             echo "%K{94}%F{54}$SEP%f%F{black} $PYTHON_ICON $(basename $VIRTUAL_ENV) %f"
         elif [[ -n "$PYENV_VERSION" ]]; then
             echo "%K{94}%F{54}$SEP%f%F{black} $PYTHON_ICON $PYENV_VERSION %f"
-        elif command -v pyenv > /dev/null 2>&1; then
-            local pyenv_version=$(pyenv version-name 2>/dev/null)
-            if [[ "$pyenv_version" != "system" ]]; then
-                echo "%K{94}%F{54}$SEP%f%F{black} $PYTHON_ICON $pyenv_version %f"
-            else
-                echo ""
-            fi
         else
             echo ""
         fi
@@ -95,11 +88,6 @@ if [[ "$TERM_PROGRAM" == "WarpTerminal" ]]; then
             local has_python_env=""
             if [[ -n "$CONDA_DEFAULT_ENV" ]] || [[ -n "$VIRTUAL_ENV" ]] || [[ -n "$PYENV_VERSION" ]]; then
                 has_python_env="yes"
-            elif command -v pyenv > /dev/null 2>&1; then
-                local pyenv_version=$(pyenv version-name 2>/dev/null)
-                if [[ "$pyenv_version" != "system" ]]; then
-                    has_python_env="yes"
-                fi
             fi
 
             # Set separator color based on previous segment
@@ -161,3 +149,7 @@ else
     PS1='$(simple_python_env)📁 %F{cyan}%n%f:%F{blue}%~%f$(simple_git_branch) %F{white}>%f '
     RPROMPT=''
 fi
+
+. "$HOME/.local/bin/env"
+
+export GPG_TTY=$(tty)
