@@ -163,4 +163,3 @@ fi
 . "$HOME/.local/bin/env"
 
 export GPG_TTY=$(tty)
-export GPG_TTY=$(tty)
