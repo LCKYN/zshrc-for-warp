@@ -84,21 +84,21 @@ if [[ "$TERM_PROGRAM" == "WarpTerminal" ]]; then
 
     # Function to build git info with icons and dynamic separator
     git_info() {
+        # Determine the previous segment color for separator (needed for both git and no-git cases)
+        local has_python_env=""
+        if [[ -n "$CONDA_DEFAULT_ENV" ]] || [[ -n "$VIRTUAL_ENV" ]]; then
+            has_python_env="yes"
+        elif command -v pyenv >/dev/null 2>&1; then
+            local pyenv_version=$(pyenv version-name 2>/dev/null)
+            if [[ -n "$pyenv_version" && "$pyenv_version" != "system" ]]; then
+                has_python_env="yes"
+            fi
+        fi
+
         if git rev-parse --git-dir > /dev/null 2>&1; then
             local branch=$(git_branch)
             local file_changes=$(git_file_changes)
             local diff_changes=$(git_diff_changes)
-
-            # Determine the previous segment color for separator
-            local has_python_env=""
-            if [[ -n "$CONDA_DEFAULT_ENV" ]] || [[ -n "$VIRTUAL_ENV" ]]; then
-                has_python_env="yes"
-            elif command -v pyenv >/dev/null 2>&1; then
-                local pyenv_version=$(pyenv version-name 2>/dev/null)
-                if [[ -n "$pyenv_version" && "$pyenv_version" != "system" ]]; then
-                    has_python_env="yes"
-                fi
-            fi
 
             # Set separator color based on previous segment
             local sep_color="54"  # default (path color)
@@ -162,4 +162,5 @@ fi
 
 . "$HOME/.local/bin/env"
 
+export GPG_TTY=$(tty)
 export GPG_TTY=$(tty)
